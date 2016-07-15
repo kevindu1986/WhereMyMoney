@@ -1,0 +1,37 @@
+﻿@model IEnumerable<WhereMyMoney.Models.Tbl_Trace>
+
+@{
+    ViewData["Title"] = "My Money Trace";
+}
+
+<h2>My Trace List</h2>
+
+<table class="table">
+    <tr>
+        <th>Date</th>
+        <th class="th-right">Amount</th>
+        <th>Currency</th>
+        <th>Description</th>
+        <th><a asp-controller="Trace" asp-action="Create">New Trace</a></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TraceDate)
+            </td>
+            <td class="th-right">
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Currency.CurrencyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <a asp-controller="Trace" asp-action="Update" asp-route-id="@item.Id">Update</a> | <a asp-controller="Trace" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you to delete this trace?');">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

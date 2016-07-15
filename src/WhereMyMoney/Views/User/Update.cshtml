@@ -1,0 +1,37 @@
+﻿@model WhereMyMoney.Models.Tbl_User
+
+@{
+    ViewData["Title"] = "Update User";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="User" asp-action="Update" method="post" class="form-horizontal" role="form">
+    <div class="form-horizontal">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="UserName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update" class="btn btn-default" />
+                <input type="button" value="Cancel" class="btn btn-default" id="cancel" />
+            </div>
+        </div>
+    </div>
+    <input type="hidden" asp-for="Password" class="form-control" />
+</form>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input#cancel').click(function () {
+                window.location = '@Url.Action("Index","User")'
+            });
+        });
+    </script>
+}
