@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,12 +16,15 @@ namespace WhereMyMoney.Models
 
         [Required]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name= "Trace Date")]
         public DateTime TraceDate { get; set; }
 
         [Required]
         public int UserId { get; set; }
 
         [Required]
+        [Range(minimum:1, maximum:Int64.MaxValue, ErrorMessage = "Please select a value.")]
+        [Display(Name = "Currency")]
         public int CurrencyId { get; set; }
 
         public string Description { get; set; }

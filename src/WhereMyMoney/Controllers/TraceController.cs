@@ -21,7 +21,66 @@ namespace WhereMyMoney.Controllers
 
         public IActionResult Create()
         {
+            ViewBag.CurrencyList = _context.Tbl_Currency.Where(c=>c.IsActive).OrderBy(c => c.CurrencyShortName).ToList();
+            ViewBag.ServerTraceDate = string.Empty;
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Tbl_Trace trace)
+        {
+            if (ModelState.IsValid)
+            {
+                trace.IsActive = true;
+                trace.UserId = 1;
+                _context.Tbl_Trace.Add(trace);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.ServerTraceDate = trace.TraceDate == DateTime.MinValue ? string.Empty : trace.TraceDate.ToString("dd-MMM-yyyy");
+            ViewBag.CurrencyList = _context.Tbl_Currency.Where(c => c.IsActive).OrderBy(c => c.CurrencyShortName).ToList();
+            return View(trace);
+        }
+
+        public IActionResult Update(int id)
+        {
+            Tbl_Trace trace = _context.Tbl_Trace.Where(c => c.Id == id).FirstOrDefault();
+            if (trace != null)
+            {
+                ViewBag.CurrencyList = _context.Tbl_Currency.Where(c => c.IsActive).OrderBy(c => c.CurrencyShortName).ToList();
+                ViewBag.ServerTraceDate = trace.TraceDate == DateTime.MinValue ? string.Empty : trace.TraceDate.ToString("dd-MMM-yyyy");
+
+                return View(trace);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Update(Tbl_Trace trace)
+        {
+            if (ModelState.IsValid)
+            {
+                Tbl_Trace dbTrace = _context.Tbl_Trace.Where(c => c.Id == trace.Id).FirstOrDefault();
+                dbTrace.Amount = trace.Amount;
+                dbTrace.TraceDate = trace.TraceDate;
+                dbTrace.Description = trace.Description;
+                dbTrace.CurrencyId = trace.CurrencyId;
+
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.ServerTraceDate = trace.TraceDate == DateTime.MinValue ? string.Empty : trace.TraceDate.ToString("dd-MMM-yyyy");
+            ViewBag.CurrencyList = _context.Tbl_Currency.Where(c => c.IsActive).OrderBy(c => c.CurrencyShortName).ToList();
+            return View(trace);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            Tbl_Trace trace = _context.Tbl_Trace.Where(c => c.Id == id).FirstOrDefault();
+            trace.IsActive = false;
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }
