@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WhereMyMoney.Models;
+using Microsoft.AspNetCore.DataProtection;
+using System.IO;
 
 namespace WhereMyMoney
 {
@@ -34,6 +36,8 @@ namespace WhereMyMoney
             // Add framework services.
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<WhereMyMoneyContext>(options => options.UseSqlServer(connection));
+
+            services.AddDataProtection().SetApplicationName("WhereMyMoney").PersistKeysToFileSystem(new DirectoryInfo(Configuration.GetSection("Key").Value));
 
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(15);

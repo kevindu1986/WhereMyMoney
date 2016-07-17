@@ -34,6 +34,7 @@ CREATE TABLE [dbo].[Tbl_User](
 	[UserName] [varchar](20) NOT NULL,
 	[Password] [varchar](50) NOT NULL,
 	[IsActive] [bit] NOT NULL,
+	[IsAdmin] [bit] NOT NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

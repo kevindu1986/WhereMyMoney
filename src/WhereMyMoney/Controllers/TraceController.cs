@@ -3,12 +3,13 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using WhereMyMoney.Models;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace WhereMyMoney.Controllers
 {
     public class TraceController : BaseController
     {
-        public TraceController(WhereMyMoneyContext context) : base(context)
+        public TraceController(WhereMyMoneyContext context, IDataProtectionProvider provider) : base(context, provider)
         {
         }
 
@@ -19,7 +20,7 @@ namespace WhereMyMoney.Controllers
                 return RedirectToLogIn();
             }
 
-            return View(_context.Tbl_Trace.Include(c=>c.Currency).Where(c => c.IsActive).OrderBy(c=>c.TraceDate).ToList());
+            return View(_context.Tbl_Trace.Include(c=>c.Currency).Where(c => c.IsActive && c.UserId == Session.UserId).OrderBy(c=>c.TraceDate).ToList());
         }
 
         public IActionResult Create()
@@ -45,7 +46,7 @@ namespace WhereMyMoney.Controllers
             if (ModelState.IsValid)
             {
                 trace.IsActive = true;
-                trace.UserId = 1;
+                trace.UserId = Session.UserId;
                 _context.Tbl_Trace.Add(trace);
                 _context.SaveChanges();
                 return RedirectToAction("Index");

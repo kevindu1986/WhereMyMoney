@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WhereMyMoney.Models;
 
@@ -12,10 +15,14 @@ namespace WhereMyMoney.Controllers
     public class BaseController : Controller
     {
         protected WhereMyMoneyContext _context;
+        protected IDataProtectionProvider _provider;
+        protected IDataProtector _protector;
 
-        public BaseController(WhereMyMoneyContext dbContext)
+        public BaseController(WhereMyMoneyContext context, IDataProtectionProvider provider)
         {
-            _context = dbContext;
+            _context = context;
+            _provider = provider;
+            _protector = _provider.CreateProtector("WhereMyMoney");
         }
 
         private ISession HttpSession {
@@ -48,6 +55,11 @@ namespace WhereMyMoney.Controllers
             HttpSession.Clear();
             ViewBag.Session = null;
             return RedirectToAction("LogIn", "User");
+        }
+
+        protected IActionResult RedirectToTrace()
+        {
+            return RedirectToAction("Index", "Trace");
         }
     }
 }

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WhereMyMoney.Models;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace WhereMyMoney.Controllers
 {
     public class CurrencyController : BaseController
     {
-        public CurrencyController(WhereMyMoneyContext context) : base(context)
+        public CurrencyController(WhereMyMoneyContext context, IDataProtectionProvider provider) : base(context, provider)
         {
         }
 
@@ -18,6 +19,10 @@ namespace WhereMyMoney.Controllers
             if(Session == null)
             {
                 return RedirectToLogIn();
+            }
+            if (!Session.IsAdmin)
+            {
+                return RedirectToTrace();
             }
 
             return View(_context.Tbl_Currency.Where(c=>c.IsActive).ToList());
@@ -29,6 +34,10 @@ namespace WhereMyMoney.Controllers
             {
                 return RedirectToLogIn();
             }
+            if (!Session.IsAdmin)
+            {
+                return RedirectToTrace();
+            }
 
             return View();
         }
@@ -39,6 +48,10 @@ namespace WhereMyMoney.Controllers
             if (Session == null)
             {
                 return RedirectToLogIn();
+            }
+            if (!Session.IsAdmin)
+            {
+                return RedirectToTrace();
             }
 
             if (ModelState.IsValid)
@@ -57,6 +70,10 @@ namespace WhereMyMoney.Controllers
             {
                 return RedirectToLogIn();
             }
+            if (!Session.IsAdmin)
+            {
+                return RedirectToTrace();
+            }
 
             Tbl_Currency currency = _context.Tbl_Currency.Where(c => c.Id == id).FirstOrDefault();
             return View(currency);
@@ -68,6 +85,10 @@ namespace WhereMyMoney.Controllers
             if (Session == null)
             {
                 return RedirectToLogIn();
+            }
+            if (!Session.IsAdmin)
+            {
+                return RedirectToTrace();
             }
 
             if (ModelState.IsValid)
@@ -87,6 +108,10 @@ namespace WhereMyMoney.Controllers
             if (Session == null)
             {
                 return RedirectToLogIn();
+            }
+            if (!Session.IsAdmin)
+            {
+                return RedirectToTrace();
             }
 
             Tbl_Currency currency = _context.Tbl_Currency.Where(c => c.Id == id).FirstOrDefault();
