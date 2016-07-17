@@ -109,6 +109,7 @@ namespace WhereMyMoney.Controllers
                 Session = new SessionObject() { UserName = user.UserName, UserId = user.Id };
                 return RedirectToAction("Index", "Trace");
             }
+            ViewBag.Message = "Username or Password is not valid!";
             return View();
         }
 
