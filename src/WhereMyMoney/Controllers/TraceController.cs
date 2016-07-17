@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using WhereMyMoney.Models;
@@ -16,11 +14,21 @@ namespace WhereMyMoney.Controllers
 
         public IActionResult Index()
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             return View(_context.Tbl_Trace.Include(c=>c.Currency).Where(c => c.IsActive).OrderBy(c=>c.TraceDate).ToList());
         }
 
         public IActionResult Create()
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             ViewBag.CurrencyList = _context.Tbl_Currency.Where(c=>c.IsActive).OrderBy(c => c.CurrencyShortName).ToList();
             ViewBag.ServerTraceDate = string.Empty;
             return View();
@@ -29,6 +37,11 @@ namespace WhereMyMoney.Controllers
         [HttpPost]
         public IActionResult Create(Tbl_Trace trace)
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             if (ModelState.IsValid)
             {
                 trace.IsActive = true;
@@ -44,6 +57,11 @@ namespace WhereMyMoney.Controllers
 
         public IActionResult Update(int id)
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             Tbl_Trace trace = _context.Tbl_Trace.Where(c => c.Id == id).FirstOrDefault();
             if (trace != null)
             {
@@ -58,6 +76,11 @@ namespace WhereMyMoney.Controllers
         [HttpPost]
         public IActionResult Update(Tbl_Trace trace)
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             if (ModelState.IsValid)
             {
                 Tbl_Trace dbTrace = _context.Tbl_Trace.Where(c => c.Id == trace.Id).FirstOrDefault();
@@ -76,6 +99,11 @@ namespace WhereMyMoney.Controllers
 
         public IActionResult Delete(int id)
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             Tbl_Trace trace = _context.Tbl_Trace.Where(c => c.Id == id).FirstOrDefault();
             trace.IsActive = false;
             _context.SaveChanges();

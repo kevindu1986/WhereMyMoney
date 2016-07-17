@@ -15,17 +15,32 @@ namespace WhereMyMoney.Controllers
 
         public IActionResult Index()
         {
+            if(Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             return View(_context.Tbl_Currency.Where(c=>c.IsActive).ToList());
         }
 
         public IActionResult Create()
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             return View();
         }
 
         [HttpPost]
         public IActionResult Create(Tbl_Currency currency)
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             if (ModelState.IsValid)
             {
                 currency.IsActive = true;
@@ -38,6 +53,11 @@ namespace WhereMyMoney.Controllers
 
         public IActionResult Update(int id)
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             Tbl_Currency currency = _context.Tbl_Currency.Where(c => c.Id == id).FirstOrDefault();
             return View(currency);
         }
@@ -45,6 +65,11 @@ namespace WhereMyMoney.Controllers
         [HttpPost]
         public IActionResult Update(Tbl_Currency currency)
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             if (ModelState.IsValid)
             {
                 Tbl_Currency dbCurrency = _context.Tbl_Currency.Where(c => c.Id == currency.Id).FirstOrDefault();
@@ -59,6 +84,11 @@ namespace WhereMyMoney.Controllers
 
         public IActionResult Delete(int id)
         {
+            if (Session == null)
+            {
+                return RedirectToLogIn();
+            }
+
             Tbl_Currency currency = _context.Tbl_Currency.Where(c => c.Id == id).FirstOrDefault();
             currency.IsActive = false;
             _context.SaveChanges();

@@ -35,10 +35,11 @@ namespace WhereMyMoney
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<WhereMyMoneyContext>(options => options.UseSqlServer(connection));
 
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
+                options.CookieName = "WhereMyMoney";
+            });
             services.AddMvc();
-
-            services.AddDistributedMemoryCache();
-            services.AddSession();
 
             services.Configure<IISOptions>(options => { 
 });
@@ -49,6 +50,8 @@ namespace WhereMyMoney
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseSession();
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -64,7 +67,6 @@ namespace WhereMyMoney
             }
 
             app.UseStaticFiles();
-            app.UseSession();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
