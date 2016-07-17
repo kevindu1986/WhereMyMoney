@@ -12,7 +12,7 @@
         <div class="form-group">
             <label asp-for="TraceDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="TraceDate" class="form-control" id="traceDate"/>
+                <input asp-for="TraceDate" class="form-control" id="traceDate" readonly/>
                 <span asp-validation-for="TraceDate" class="text-danger"></span>
             </div>
         </div>
@@ -59,6 +59,14 @@
 
             $('input#cancel').click(function () {
                 window.location = '@Url.Action("Index","Trace")';
+            });
+
+            $('#traceDate').datepicker({
+                format: "dd-M-yyyy",
+                weekStart: 1,
+                todayBtn: true,
+                daysOfWeekHighlighted: "0,6",
+                todayHighlight: true
             });
         });
     </script>
