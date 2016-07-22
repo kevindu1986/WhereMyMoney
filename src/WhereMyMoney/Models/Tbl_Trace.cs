@@ -23,14 +23,24 @@ namespace WhereMyMoney.Models
         public int UserId { get; set; }
 
         [Required]
-        [Range(minimum:1, maximum:Int64.MaxValue, ErrorMessage = "Please select a value.")]
+        [Range(minimum:1, maximum:Int64.MaxValue, ErrorMessage = "Please select a currency.")]
         [Display(Name = "Currency")]
         public int CurrencyId { get; set; }
+
+        [Required]
+        [Range(minimum: 1, maximum: Int64.MaxValue, ErrorMessage = "Please select a category.")]
+        [Display(Name = "Category")]
+        public int CategoryId { get; set; }
+
+        [Required]
+        [Display(Name = "Transaction Type")]
+        public string TransactionType { get; set; }
 
         public string Description { get; set; }
 
         public bool IsActive { get; set; }
 
+        public virtual Tbl_Category Category { get; set; }
         public virtual Tbl_Currency Currency { get; set; }
         public virtual Tbl_User User { get; set; }
     }

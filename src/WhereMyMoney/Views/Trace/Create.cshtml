@@ -1,4 +1,6 @@
-﻿@model WhereMyMoney.Models.Tbl_Trace
+﻿@using WhereMyMoney.Models
+
+@model WhereMyMoney.Models.Tbl_Trace
 
 @{
     ViewData["Title"] = "New Money Trace";
@@ -30,6 +32,27 @@
                     <option value="0">--Select--</option>
                 </select>
                 <span asp-validation-for="CurrencyId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CategoryId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.CategoryList, "Id", "CategoryName"))" class="form-control">
+                    <option value="0">--Select--</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="TransactionType" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="TransactionType" class="form-control">
+                    <option value="">--Select--</option>
+                    <option value="@(Tbl_TransactionType.Income)">@(Tbl_TransactionType.Income)</option>
+                    <option value="@(Tbl_TransactionType.Outcome)">@(Tbl_TransactionType.Outcome)</option>
+                    <option value="@(Tbl_TransactionType.Transfer)">@(Tbl_TransactionType.Transfer)</option>
+                </select>
+                <span asp-validation-for="TransactionType" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">

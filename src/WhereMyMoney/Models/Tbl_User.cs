@@ -27,6 +27,8 @@ namespace WhereMyMoney.Models
         [Display(Name = "Is Administrator")]
         public bool IsAdmin { get; set; }
 
+        public virtual ICollection<Tbl_Category> Tbl_Category { get; set; }
+
         public virtual ICollection<Tbl_Trace> Tbl_Trace { get; set; }
 
         [StringLength(12, MinimumLength = 8)]

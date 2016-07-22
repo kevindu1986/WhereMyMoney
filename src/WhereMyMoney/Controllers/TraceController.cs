@@ -13,6 +13,12 @@ namespace WhereMyMoney.Controllers
         {
         }
 
+        private void LoadViewbagList()
+        {
+            ViewBag.CurrencyList = _context.Tbl_Currency.Where(c => c.IsActive).OrderBy(c => c.CurrencyShortName).ToList();
+            ViewBag.CategoryList = _context.Tbl_Category.Where(c => c.IsActive && c.UserID == Session.UserId).OrderBy(c => c.CategoryName).ToList();
+        }
+
         public IActionResult Index()
         {
             if (Session == null)
@@ -20,7 +26,7 @@ namespace WhereMyMoney.Controllers
                 return RedirectToLogIn();
             }
 
-            return View(_context.Tbl_Trace.Include(c=>c.Currency).Where(c => c.IsActive && c.UserId == Session.UserId).OrderBy(c=>c.TraceDate).ToList());
+            return View(_context.Tbl_Trace.Include(c=>c.Currency).Include(c=>c.Category).Where(c => c.IsActive && c.UserId == Session.UserId).OrderBy(c=>c.TraceDate).ToList());
         }
 
         public IActionResult Create()
@@ -30,7 +36,7 @@ namespace WhereMyMoney.Controllers
                 return RedirectToLogIn();
             }
 
-            ViewBag.CurrencyList = _context.Tbl_Currency.Where(c=>c.IsActive).OrderBy(c => c.CurrencyShortName).ToList();
+            LoadViewbagList();
             ViewBag.ServerTraceDate = string.Empty;
             return View();
         }
@@ -52,7 +58,7 @@ namespace WhereMyMoney.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.ServerTraceDate = trace.TraceDate == DateTime.MinValue ? string.Empty : trace.TraceDate.ToString("dd-MMM-yyyy");
-            ViewBag.CurrencyList = _context.Tbl_Currency.Where(c => c.IsActive).OrderBy(c => c.CurrencyShortName).ToList();
+            LoadViewbagList();
             return View(trace);
         }
 
@@ -66,7 +72,7 @@ namespace WhereMyMoney.Controllers
             Tbl_Trace trace = _context.Tbl_Trace.Where(c => c.Id == id).FirstOrDefault();
             if (trace != null)
             {
-                ViewBag.CurrencyList = _context.Tbl_Currency.Where(c => c.IsActive).OrderBy(c => c.CurrencyShortName).ToList();
+                LoadViewbagList();
                 ViewBag.ServerTraceDate = trace.TraceDate == DateTime.MinValue ? string.Empty : trace.TraceDate.ToString("dd-MMM-yyyy");
 
                 return View(trace);
@@ -89,12 +95,14 @@ namespace WhereMyMoney.Controllers
                 dbTrace.TraceDate = trace.TraceDate;
                 dbTrace.Description = trace.Description;
                 dbTrace.CurrencyId = trace.CurrencyId;
+                dbTrace.CategoryId = trace.CategoryId;
+                dbTrace.TransactionType = trace.TransactionType;
 
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.ServerTraceDate = trace.TraceDate == DateTime.MinValue ? string.Empty : trace.TraceDate.ToString("dd-MMM-yyyy");
-            ViewBag.CurrencyList = _context.Tbl_Currency.Where(c => c.IsActive).OrderBy(c => c.CurrencyShortName).ToList();
+            LoadViewbagList();
             return View(trace);
         }
 

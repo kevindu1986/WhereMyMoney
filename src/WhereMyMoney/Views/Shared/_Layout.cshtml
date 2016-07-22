@@ -2,7 +2,8 @@
 @using Newtonsoft.Json;
 @using WhereMyMoney.Models;
 
-@if (Context.Session.Keys.Count() > 0) {
+@if (Context.Session.Keys.Count() > 0)
+{
     ViewBag.UserName = JsonConvert.DeserializeObject<SessionObject>(Context.Session.GetString("SessionObject")).UserName;
     ViewBag.IsAdmin = JsonConvert.DeserializeObject<SessionObject>(Context.Session.GetString("SessionObject")).IsAdmin;
 }
@@ -34,11 +35,22 @@
                 {
                     <ul class="nav navbar-nav">
                         <li><a asp-controller="Trace" asp-action="Index">My Money</a></li>
-                        @if (ViewBag.IsAdmin)
-                        {
-                            <li><a asp-controller="User" asp-action="Index">User</a></li>
-                            <li><a asp-controller="Currency" asp-action="Index">Currency</a></li>
-                        }
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Administration
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @if (ViewBag.IsAdmin)
+                                {
+                                    <li><a asp-controller="User" asp-action="Index">User</a></li>
+                                    <li><a asp-controller="Currency" asp-action="Index">Currency</a></li>
+                                }
+                                <li><a asp-controller="Category" asp-action="Index">Category</a></li>
+                            </ul>
+                        </li>
+
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a asp-controller="User" asp-action="ChangePassword"><span class="glyphicon glyphicon-barcode"></span> Change Password</a></li>

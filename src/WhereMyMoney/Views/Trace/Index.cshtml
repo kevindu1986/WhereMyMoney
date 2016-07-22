@@ -11,6 +11,8 @@
         <th>Date</th>
         <th class="th-right">Amount</th>
         <th>Currency</th>
+        <th>Category</th>
+        <th>Transaction Type</th>
         <th>Description</th>
         <th><a asp-controller="Trace" asp-action="Create">New Trace</a></th>
     </tr>
@@ -25,6 +27,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Currency.CurrencyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionType)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<WhereMyMoney.Models.Tbl_Category>
+
+@{
+    ViewData["Title"] = "Category List";
+}
+
+<h2>Category List</h2>
+
+<table class="table">
+    <tr>
+        <th>Category Name</th>
+        <th>Description</th>
+        <th><a asp-controller="Category" asp-action="Create">Create new Category</a></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <a asp-controller="Category" asp-action="Update" asp-route-id="@item.Id">Update</a> | <a asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you to delete \'@item.CategoryName\'?');">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

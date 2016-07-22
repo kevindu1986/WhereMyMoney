@@ -13,6 +13,21 @@ namespace WhereMyMoney.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Tbl_Category>(entity =>
+            {
+                entity.Property(e => e.CategoryName)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.Description).HasColumnType("ntext");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Tbl_Category)
+                    .HasForeignKey(d => d.UserID)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Tbl_Category_Tbl_User");
+            });
+
             modelBuilder.Entity<Tbl_Currency>(entity =>
             {
                 entity.Property(e => e.CurrencyName)
@@ -34,6 +49,16 @@ namespace WhereMyMoney.Models
 
                 entity.Property(e => e.TraceDate).HasColumnType("date");
 
+                entity.Property(e => e.TransactionType)
+                    .IsRequired()
+                    .HasColumnType("varchar(10)");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Tbl_Trace)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Tbl_Trace_Tbl_Category");
+
                 entity.HasOne(d => d.Currency)
                     .WithMany(p => p.Tbl_Trace)
                     .HasForeignKey(d => d.CurrencyId)
@@ -51,7 +76,7 @@ namespace WhereMyMoney.Models
             {
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasColumnType("varchar(50)");
+                    .HasColumnType("varchar(500)");
 
                 entity.Property(e => e.UserName)
                     .IsRequired()
@@ -59,6 +84,7 @@ namespace WhereMyMoney.Models
             });
         }
 
+        public virtual DbSet<Tbl_Category> Tbl_Category { get; set; }
         public virtual DbSet<Tbl_Currency> Tbl_Currency { get; set; }
         public virtual DbSet<Tbl_Trace> Tbl_Trace { get; set; }
         public virtual DbSet<Tbl_User> Tbl_User { get; set; }
